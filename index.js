@@ -1,9 +1,9 @@
-const {argv} = require('yargs');
+const { argv } = require('yargs');
 const inventory = require('./inventory.json')
 
 // Declaring variables
 let input, inputArr = [];
-let purchase_country, optional_passport_number, gloves, masks, europian = false, german = false, total_sale_price=0;
+let purchase_country, optional_passport_number, gloves, masks, europian = false, german = false, total_sale_price = 0;
 let stockExceeds = false;
 
 // REGEX
@@ -25,117 +25,117 @@ let initialGermanyMask = inventory.germany.masks.available_units;
 let initialGermanyGloves = inventory.germany.gloves.available_units;
 
 // Assigning values with passport
-if(inputArr.length > 5){
+if (inputArr.length > 5) {
     optional_passport_number = inputArr[1];
-    if(inputArr[2].toLowerCase() == "gloves"){
+    if (inputArr[2].toLowerCase() == "gloves") {
         gloves = inputArr[3];
         masks = inputArr[5];
     }
-    if(inputArr[2].toLowerCase() == "mask"){
+    if (inputArr[2].toLowerCase() == "mask") {
         masks = inputArr[3];
         gloves = inputArr[5];
     }
 }
 // Assigning values without passport
-else { 
-    if(inputArr[1].toLowerCase() == "gloves"){
+else {
+    if (inputArr[1].toLowerCase() == "gloves") {
         gloves = inputArr[2];
         masks = inputArr[4];
     }
-    if(inputArr[1].toLowerCase() == "mask"){
+    if (inputArr[1].toLowerCase() == "mask") {
         manas = inputArr[2];
         gloves = inputArr[4];
     }
 }
 
 // Validating Passport
-if(optional_passport_number && (!ukPassportValidation.test(optional_passport_number) && !germanPassportValidation.test(optional_passport_number))){
-     console.log("Given passport is invalid")
+if (optional_passport_number && (!ukPassportValidation.test(optional_passport_number) && !germanPassportValidation.test(optional_passport_number))) {
+    console.log("Given passport is invalid")
 }
-else if(optional_passport_number && ukPassportValidation.test(optional_passport_number)){
+else if (optional_passport_number && ukPassportValidation.test(optional_passport_number)) {
     europian = true;
 }
-else if(optional_passport_number && germanPassportValidation.test(optional_passport_number)){
+else if (optional_passport_number && germanPassportValidation.test(optional_passport_number)) {
     german = true;
 }
-else{
+else {
     // No Passport
 }
 
 // Checking out of stock
-if(masks > (inventory.uk.masks.available_units + inventory.germany.masks.available_units) || 
-        gloves > (inventory.uk.gloves.available_units + inventory.germany.gloves.available_units)) {
-            stockExceeds = true;
-        return console.log(`OUT OF STOCK:${inventory.uk.masks.available_units}:${inventory.germany.masks.available_units}:${inventory.uk.gloves.available_units}:${inventory.germany.gloves.available_units}`)
+if (masks > (inventory.uk.masks.available_units + inventory.germany.masks.available_units) ||
+    gloves > (inventory.uk.gloves.available_units + inventory.germany.gloves.available_units)) {
+    stockExceeds = true;
+    return console.log(`OUT OF STOCK:${inventory.uk.masks.available_units}:${inventory.germany.masks.available_units}:${inventory.uk.gloves.available_units}:${inventory.germany.gloves.available_units}`)
 }
 
 
-if(purchase_country.toLowerCase() == "uk"){
-     // masks
-     if(masks > inventory.uk.masks.available_units){
+if (purchase_country.toLowerCase() == "uk") {
+    // masks
+    if (masks > inventory.uk.masks.available_units) {
         masks = masks - inventory.uk.masks.available_units
         inventory.uk.masks.available_units = 0;
         inventory.germany.masks.available_units = inventory.germany.masks.available_units - masks
     }
-    else{
+    else {
         inventory.uk.masks.available_units = inventory.uk.masks.available_units - masks
     }
 
     // gloves
-    if(gloves > inventory.uk.gloves.available_units){
+    if (gloves > inventory.uk.gloves.available_units) {
         gloves = gloves - inventory.uk.gloves.available_units
         inventory.uk.gloves.available_units = 0;
         inventory.germany.gloves.available_units = inventory.germany.gloves.available_units - gloves
     }
-    else{
+    else {
         inventory.uk.gloves.available_units = inventory.uk.gloves.available_units - gloves
     }
 }
 
-if(purchase_country.toLowerCase() == "germany"){
+if (purchase_country.toLowerCase() == "germany") {
     //Europian
-    if(europian){
+    if (europian) {
         // masks
-        if(masks > inventory.uk.masks.available_units){
+        if (masks > inventory.uk.masks.available_units) {
             masks = masks - inventory.uk.masks.available_units
             inventory.uk.masks.available_units = 0;
             inventory.germany.masks.available_units = inventory.germany.masks.available_units - masks
         }
-        else{
+        else {
             inventory.uk.masks.available_units = inventory.uk.masks.available_units - masks
         }
 
         // gloves
-        if(gloves > inventory.uk.gloves.available_units){
+        if (gloves > inventory.uk.gloves.available_units) {
             gloves = gloves - inventory.uk.gloves.available_units
             inventory.uk.gloves.available_units = 0;
             inventory.germany.gloves.available_units = inventory.germany.gloves.available_units - gloves
         }
-        else{
+        else {
             let remaining = gloves % 10;
             inventory.germany.gloves.available_units = inventory.germany.gloves.available_units - remaining;
             inventory.uk.gloves.available_units = inventory.uk.gloves.available_units - (gloves - remaining)
         }
     }
     // German 
-    else{
+    else {
         // masks
-        if(masks > inventory.germany.masks.available_units){
+        if (masks > inventory.germany.masks.available_units) {
             masks = masks - inventory.germany.masks.available_units
             inventory.germany.masks.available_units = 0;
             inventory.uk.masks.available_units = inventory.uk.masks.available_units - masks
         }
-        else{
+        else {
             inventory.germany.masks.available_units = inventory.germany.masks.available_units - masks
         }
 
         // gloves
-        if(gloves > inventory.uk.gloves.available_units){
+        if (gloves > inventory.uk.gloves.available_units) {
             gloves = gloves - inventory.uk.gloves.available_units
             inventory.uk.gloves.available_units = 0;
             inventory.germany.gloves.available_units = inventory.germany.gloves.available_units - gloves
         }
-        else{
+        else {
             let remaining = gloves % 10;
             inventory.germany.gloves.available_units = inventory.germany.gloves.available_units - remaining;
             inventory.uk.gloves.available_units = inventory.uk.gloves.available_units - (gloves - remaining)
@@ -146,37 +146,37 @@ if(purchase_country.toLowerCase() == "germany"){
 
 
 // Calculating total_sale_price
-if(purchase_country.toLowerCase() == "uk"){
-    total_sale_price = ((initialUkMask - inventory.uk.masks.available_units) * inventory.uk.masks.cost) +  ((initialUkGloves - inventory.uk.gloves.available_units) * inventory.uk.gloves.cost) + 
-    ((initialGermanyMask - inventory.germany.masks.available_units) * inventory.germany.masks.cost) +  ((initialGermanyGloves - inventory.germany.gloves.available_units) * inventory.germany.gloves.cost)
+if (purchase_country.toLowerCase() == "uk") {
+    total_sale_price = ((initialUkMask - inventory.uk.masks.available_units) * inventory.uk.masks.cost) + ((initialUkGloves - inventory.uk.gloves.available_units) * inventory.uk.gloves.cost) +
+        ((initialGermanyMask - inventory.germany.masks.available_units) * inventory.germany.masks.cost) + ((initialGermanyGloves - inventory.germany.gloves.available_units) * inventory.germany.gloves.cost)
 
-    if(german && ((masks > inventory.uk.masks.available_units) || (gloves > inventory.uk.gloves.available_units))){
+    if (german && ((masks > inventory.uk.masks.available_units) || (gloves > inventory.uk.gloves.available_units))) {
         total_sale_price = total_sale_price + (Math.floor((initialGermanyMask - inventory.germany.masks.available_units) / 10) * 3.2 * 100) + (Math.floor((initialGermanyGloves - inventory.germany.gloves.available_units) / 10) * 3.2 * 100)
     }
-    else if(german){
-        total_sale_price = total_sale_price + (Math.floor((initialGermanyMask - inventory.germany.masks.available_units) / 10) * 4 * 100 ) + (Math.floor((initialGermanyGloves - inventory.germany.gloves.available_units) / 10) * 4 * 100) 
+    else if (german) {
+        total_sale_price = total_sale_price + (Math.floor((initialGermanyMask - inventory.germany.masks.available_units) / 10) * 4 * 100) + (Math.floor((initialGermanyGloves - inventory.germany.gloves.available_units) / 10) * 4 * 100)
     }
-    else{
-        total_sale_price = total_sale_price + (Math.floor((initialGermanyMask - inventory.germany.masks.available_units) / 10) * 4 * 100 ) + (Math.floor((initialGermanyGloves - inventory.germany.gloves.available_units) / 10) * 4 * 100) 
+    else {
+        total_sale_price = total_sale_price + (Math.floor((initialGermanyMask - inventory.germany.masks.available_units) / 10) * 4 * 100) + (Math.floor((initialGermanyGloves - inventory.germany.gloves.available_units) / 10) * 4 * 100)
     }
 }
 
-else{
-    total_sale_price = ((initialUkMask - inventory.uk.masks.available_units) * inventory.uk.masks.cost) +  ((initialUkGloves - inventory.uk.gloves.available_units) * inventory.uk.gloves.cost) + 
-    ((initialGermanyMask - inventory.germany.masks.available_units) * inventory.germany.masks.cost) +  ((initialGermanyGloves - inventory.germany.gloves.available_units) * inventory.germany.gloves.cost)
+else {
+    total_sale_price = ((initialUkMask - inventory.uk.masks.available_units) * inventory.uk.masks.cost) + ((initialUkGloves - inventory.uk.gloves.available_units) * inventory.uk.gloves.cost) +
+        ((initialGermanyMask - inventory.germany.masks.available_units) * inventory.germany.masks.cost) + ((initialGermanyGloves - inventory.germany.gloves.available_units) * inventory.germany.gloves.cost)
 
-    if(europian && ((masks > inventory.germany.masks.available_units) || (gloves > inventory.germany.gloves.available_units))){
+    if (europian && ((masks > inventory.germany.masks.available_units) || (gloves > inventory.germany.gloves.available_units))) {
         total_sale_price = total_sale_price + (Math.floor((initialUkMask - inventory.uk.masks.available_units) / 10) * 3.2 * 100) + (Math.floor((initialUkGloves - inventory.uk.gloves.available_units) / 10) * 3.2 * 100)
     }
-    else if(europian){
+    else if (europian) {
         total_sale_price = total_sale_price + (Math.floor((initialUkMask - inventory.uk.masks.available_units) / 10) * 3.2 * 100) + (Math.floor((initialUkGloves - inventory.uk.gloves.available_units) / 10) * 3.2 * 100)
     }
-    else{
-        total_sale_price = total_sale_price + (Math.floor((initialUkMask - inventory.uk.masks.available_units) / 10) * 4 * 100 ) + (Math.floor((initialUkGloves - inventory.uk.gloves.available_units) / 10) * 4 * 100) 
+    else {
+        total_sale_price = total_sale_price + (Math.floor((initialUkMask - inventory.uk.masks.available_units) / 10) * 4 * 100) + (Math.floor((initialUkGloves - inventory.uk.gloves.available_units) / 10) * 4 * 100)
     }
 }
 
 // Output
 console.log(`${total_sale_price}:${inventory.uk.masks.available_units}:${inventory.germany.masks.available_units}:${inventory.uk.gloves.available_units}:${inventory.germany.gloves.available_units}`)
 
-    
+
