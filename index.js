@@ -26,7 +26,6 @@ let initialGermanyGloves = inventory.germany.gloves.available_units;
 
 // Assigning values with passport
 if(inputArr.length > 5){
-    console.log("optional passport")
     optional_passport_number = inputArr[1];
     if(inputArr[2].toLowerCase() == "gloves"){
         gloves = inputArr[3];
