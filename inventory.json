@@ -1,0 +1,33 @@
+{
+    "uk" : {
+        "masks" : {
+            "available_units" : 100,
+            "cost" : 65,
+            "currency" : "GBP"
+        },
+        "gloves" : {
+            "available_units" : 100,
+            "cost" : 100,
+            "currency" : "GBP"
+        }
+    },
+
+    "germany" : {
+        "masks" : {
+            "available_units" : 100,
+            "cost" : 100,
+            "currency" : "GBP"
+        },
+        "gloves" : {
+            "available_units" : 50,
+            "cost" : 150,
+            "currency" : "GBP"
+        }
+    },
+
+    "transportation" : {
+        "cost" : 400,
+        "per_units" : 10,
+        "currency" : "GBP"
+    }
+}
